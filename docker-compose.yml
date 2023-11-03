@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  server:
+    build:
+      dockerfile: .docker/Dockerfile
+      context: .
+    image: eorlov/pow
+    ports:
+      - "9102:9102"
+    environment:
+      - PRIVATE_KEY=${PRIVATE_KEY}
+    entrypoint: "./pow server -addr 0.0.0.0:9102"
+
+  client:
+    build:
+      dockerfile: .docker/Dockerfiled
+      context: .
+    depends_on:
+      - server
+    image: eorlov/pow
+    entrypoint: "./pow client -dst server:9102"
